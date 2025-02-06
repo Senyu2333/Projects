@@ -15,13 +15,24 @@ body {
     padding: 10px;
 }
 #controls,#stats{
-    border: 1px solid #0a0a23;
+    border: 1px solid #000000;
     padding: 5px;
-    color: #0a0a23;
+    color: #000000;
 }
 #monsterStats{
-    border: 1px solid #0a0a23;
+    display: none;
+    border: 1px solid #000000;
     padding: 5px;
     color:#FFFFFF;
     background-color: #c70d0d;
+}
+.stats{
+    padding: 10px;
+}
+button{
+    cursor: pointer;
+    color:#000000;
+    background-color: #feac32;
+    background-image: linear-gradient(#fecc4c,#ffac33);
+    border: 3px solid #feac32;
 }
