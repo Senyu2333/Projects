@@ -1,0 +1,25 @@
+.photo{
+    width:362px;
+    height:154px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+p{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction: column;
+}
+
+hr{
+    display:block;
+    width:100%;
+}
