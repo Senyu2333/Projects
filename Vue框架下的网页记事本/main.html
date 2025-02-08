@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>记事本</title>
+</head>
+<body style="background-color: rgb(245,222,179);">
+<section id="app">
+<h1 style="text-align: center;">网页记事本</h1>
+  <h2 style="color:rgba(0,0,0,0.6);text-align: center">Just do it!</h2>
+<input placeholder="请输入事项" v-model="input" style="margin: 0 auto;display: block;border-radius: 5px;height: 40px;width: 400px;">
+<button class="add" @click='add' style="margin: 0 auto;display: block;height: 50px">添加任务</button>
+  <section class="list">
+  <ul style="border: 1px solid black;max-width:370px;margin: 0 auto;background-color: rgb(255,255,234);">
+    <li v-for="(thing, index) in list" :key="index" style="display: flex; justify-content: space-between; align-items: center;">
+        {{thing}}
+        <button class ="delete" @click='del'>删除</button>
+    </li>
+  </ul>
+  <p style="text-align: center">合计：<strong>{{list.length}}</strong></p>
+  <button class="clear" @click='clear' style="display: block;margin: 0 auto;">清空</button>
+  </section>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data:{
+      input:'',
+      list:[],
+    },
+    methods: {
+      del(id){
+        this.list.splice(id,1);
+      },
+      add() {
+        this.list.unshift(this.input);
+        this.input = '';
+      },
+      clear() {
+        this.list = [];
+      }
+    }
+    })
+</script>
+</body>
+</html>
