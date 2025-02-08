@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>明日方舟官方历年春节宣传图一览</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <div>
+        <img :src="List1[index]" :alt="List2[index]" >
+    </div>
+    <button @click="index--" v-show="index > 0">上一页</button>
+    <button @click="index++" v-show="index < List1.length - 1">下一页</button>
+    <p>当前页数：{{index + 1}}</p>
+</div>
+</body>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            index: 0,
+            List1: [
+                './img/1.jpg',
+                './img/2.jpg',
+                './img/3.jpg',
+                './img/4.jpg',
+                './img/5.jpg',
+                './img/6.jpg',
+                './img/7.jpg',
+            ],
+            List2: [
+                '2018',
+                '2020',
+                '2021',
+                '2022',
+                '2023',
+                '2024',
+                '2025'
+            ],
+
+        }
+    });
+</script>
+</html>
