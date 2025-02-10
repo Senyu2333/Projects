@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>网页导航</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<style>
+    #container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        height: 50px;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        justify-content: space-around;
+        align-items: stretch;
+
+    }
+    #container li {
+        width: calc((100% - 14 * 10px) / 15);
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .background {
+        background-color: #203E8A;
+
+    }
+    .active {
+        background-color: red;
+
+    }
+    #app a{
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+    }
+    #header {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+</style>
+<body>
+<header id="header">
+    <img src="https://i2.sinaimg.cn/dy/deco/2012/0613/yocc20120613img01/news_logo.png" title="新浪新闻中心" alt="新浪新闻中心">
+    <a href="https://so.sina.cn/palmnews/web-sinanews-app-download.d.html">新浪新闻客户端</a>
+    <input type="text" placeholder="请输入关键词">
+    <select>
+        <option>新闻</option>
+        <option>图片</option>
+        <option>视频</option>
+    </select>
+    <button type="button" style="background-color: #203E8A;color: white">搜索</button>
+</header>
+<hr>
+<footer id="app">
+    <ul id="container" class="background">
+        <li v-for="(item, index) in List" :key="item.id" @click="applyIndex=index" :class="{active: index===applyIndex}">
+            <a  href="#">{{item.name}} </a>
+        </li>
+    </ul>
+</footer>
+<img src="https://p1.img.cctvpic.com/fmspic/pd/1200100neitui20250103.jpg" style="width:100%">
+</body>
+
+<script>
+    const app = new Vue({
+    el: '#app',
+    data: {
+        applyIndex: 0,
+        List:[
+            {id:1,name:"滚动"},
+            {id:2,name:"排行"},
+            {id:3,name:"政务"},
+            {id:4,name:"国内"},
+            {id:5,name:"国际"},
+            {id:6,name:"军事"},
+            {id:7,name:"小视频"},
+            {id:8,name:"文化"},
+            {id:9,name:"黑猫投诉"},
+            {id:10,name:"视频"},
+            {id:11,name:"体育"},
+            {id:12,name:"娱乐"},
+            {id:13,name:"财经"},
+            {id:14,name:"科技"},
+            {id:15,name:"专题"}
+        ],
+        list:[
+            {}
+        ]
+    }
+    })
+</script>
+</html>
