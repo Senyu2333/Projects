@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>个人中心</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <style>
+    #app-container {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+<div id="app-container">
+  <h1>
+    个人信息
+  </h1>
+  <br>
+  <label for="username">用户名:</label>
+  <input type="text" v-model.trim="user.username">
+  <br><br>
+  <label for="account">账号:</label>
+  <input type="text" v-model.trim="user.account">
+  <br><br>
+  <label for="password">密码:</label>
+  <input type="password" v-model.trim="user.password">
+  <br><br>
+  <label for="gender">性别:</label>
+  <select v-model="user.gender">
+    <option value="male">男</option>
+    <option value="female">女</option>
+    <option value="other">其他</option>
+  </select>
+  <br>
+  <label for="information">个人简介</label>
+  <br>
+  <textarea id="information" v-model="user.information"></textarea>
+  <br>
+  <button type="button" @click="ready">注册</button>
+</div>
+<script>
+  var app = new Vue({
+    el: "#app-container",
+    data() {
+      return {
+        user: {
+          username: "",
+          account: "",
+          password: "",
+          gender: "male",
+          information: "",
+        }
+      };
+    },
+    methods: {
+      ready() {
+        console.log(this.user);
+      }
+    }
+  })
+</script>
+</body>
+</html>
