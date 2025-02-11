@@ -194,12 +194,12 @@
             totalGradescore() {
                 return this.list.reduce((sum, item) => {
                     let gradePoint = this.getGradePoint(item.grade);
-                    return sum + item.score * gradePoint;
+                    return sum + gradePoint; 
                 }, 0);
             },
             averagescore() {
                 if (this.totalscore === 0) return "0";
-                return (Number(this.totalGradescore.toFixed(1)) / this.totalscore).toFixed(1);
+                return (this.totalGradescore / this.totalscore).toFixed(1);
             }
         }
     });
