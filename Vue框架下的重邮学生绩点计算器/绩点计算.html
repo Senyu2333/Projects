@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>重庆邮电大学学生学分绩点计算</title>
+    <style>
+        table th, table td {
+            padding: 10px;
+        }
+        table td:nth-child(1),
+        table th:nth-child(1) {
+            width: 50px;
+        }
+        table td:nth-child(6),
+        table th:nth-child(6) {
+            width: 100px;
+        }
+        .summary span {
+            margin-right: 20px;
+        }
+        .low-grade {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <header>
+        <table border="1" style="margin-left: auto; margin-right: auto;">
+            <caption><strong>计算规则</strong></caption>
+            <tr>
+                <th>成绩(N)</th>
+                <th>N>=90</th>
+                <th>N>=85</th>
+                <th>N>=82</th>
+                <th>N>=78</th>
+                <th>N>=75</th>
+                <th>N>=72</th>
+                <th>N>=68</th>
+                <th>N>=66</th>
+                <th>N>=63</th>
+                <th>N>=60</th>
+                <th style="color: red">N<60</th>
+            </tr>
+            <tr>
+                <th>等级</th>
+                <th>A</th>
+                <th>A-</th>
+                <th>B+</th>
+                <th>B</th>
+                <th>B-</th>
+                <th>C+</th>
+                <th>C</th>
+                <th>C-</th>
+                <th>D+</th>
+                <th>D</th>
+                <th style="color: red">F</th>
+            </tr>
+            <tr>
+                <th>绩点</th>
+                <th>4.0</th>
+                <th>3.7</th>
+                <th>3.3</th>
+                <th>3.0</th>
+                <th>2.7</th>
+                <th>2.3</th>
+                <th>2.0</th>
+                <th>1.7</th>
+                <th>1.3</th>
+                <th>1.0</th>
+                <th style="color: red">0.0</th>
+            </tr>
+        </table>
+        <p style="text-align: center"><strong>一门课程的学分绩点等于该课程的学分数乘以绩点数，平均学分绩点等于学生取得的全部课程学分绩点之和除以这些课程学分数之和。</strong></p>
+    </header>
+    <hr>
+    <footer>
+        <div>
+            <table border="1" style="margin-left: auto; margin-right: auto;">
+                <caption><strong>我的成绩</strong></caption>
+                <thead>
+                <tr>
+                    <td>编号</td>
+                    <td>科目</td>
+                    <td>成绩</td>
+                    <td>学分</td>
+                    <td>绩点</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+
+                <tbody v-if="list.length > 0">
+                <tr v-for="(item, index) in list" :key="item.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ item.subject }}</td>
+                    <td :class="{ 'low-grade': item.grade < 60 }">{{ item.grade }}</td>
+                    <td>{{ item.score }}</td>
+                    <td>{{ getGradePoint(item.grade) }}</td>
+                    <td @click="del(item.id)"  :style="{color:'red'}">删除</td>
+                </tr>
+                </tbody>
+
+                <tbody v-else>
+                <tr>
+                    <td colspan="6" style="text-align: center;">暂无数据</td>
+                </tr>
+                </tbody>
+
+                <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <span>总绩点: {{ totalGradescore }}</span>
+                        <span>总学分: {{ totalscore }}</span>
+                        <span>平均学分绩点: {{ averagescore }}</span>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </footer>
+
+    <div class="form" style="margin-top: 20px;">
+        <div class="label">科目:</div>
+        <div class="input">
+            <input type="text" v-model.trim="subject" placeholder="请输入科目" @keyup.enter="add">
+        </div>
+        <div class="label">成绩:</div>
+        <div class="input">
+            <input type="text" v-model.number="grade" placeholder="请输入成绩" @keyup.enter="add">
+        </div>
+        <div class="label">学分:</div>
+        <div class="input">
+            <input type="text" v-model.number="score" placeholder="请输入学分" @keyup.enter="add">
+        </div>
+        <button @click="add">添加</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            list: [],
+            subject: '',
+            grade: '',
+            score: '',
+        },
+        methods: {
+            del(id) {
+                this.list = this.list.filter(item => item.id !== id);
+            },
+            add() {
+                if (!this.subject) {
+                    alert("请输入科目");
+                    return;
+                }
+                if (!this.grade && this.grade !== 0) {
+                    alert("请输入正确成绩");
+                    return;
+                }
+                if (!this.score && this.score !== 0) {
+                    alert("请输入正确学分");
+                    return;
+                }
+                this.list.unshift({
+                    id: +new Date(),
+                    subject: this.subject,
+                    grade: this.grade,
+                    score: this.score,
+                });
+                this.subject = '';
+                this.grade = '';
+                this.score = '';
+            },
+            getGradePoint(grade) {
+                if (grade >= 90) return 4.0;
+                if (grade >= 85) return 3.7;
+                if (grade >= 82) return 3.3;
+                if (grade >= 78) return 3.0;
+                if (grade >= 75) return 2.7;
+                if (grade >= 72) return 2.3;
+                if (grade >= 68) return 2.0;
+                if (grade >= 66) return 1.7;
+                if (grade >= 63) return 1.3;
+                if (grade >= 60) return 1.0;
+                return 0.0;
+            }
+        },
+        computed: {
+            totalscore() {
+                return this.list.reduce((sum, item) => sum + item.score, 0);
+            },
+            totalGradescore() {
+                return this.list.reduce((sum, item) => {
+                    let gradePoint = this.getGradePoint(item.grade);
+                    return sum + item.score * gradePoint;
+                }, 0);
+            },
+            averagescore() {
+                if (this.totalscore === 0) return "0";
+                return (Number(this.totalGradescore.toFixed(1)) / this.totalscore).toFixed(1);
+            }
+        }
+    });
+</script>
+</body>
+</html>
+
+
