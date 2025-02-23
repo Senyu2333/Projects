@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>班级教材预订清单</title>
+</head>
+<style>
+    tr:hover{
+        background-color: #f5f5f5;
+    }
+    .img{
+        width: 75px;
+        height: 100px;
+    }
+    .center{
+        text-align: center;
+    }
+</style>
+<body>
+<div id="app">
+<table border="2" style="margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 10px;font-size:12px;font-family: verdana;font-weight: bold;">
+    <caption>班级教材预订清单</caption>
+    <thead style="background-color:rgb(156,186,95);color:white;border-bottom-width: 0;">
+    <tr style="text-align: center">
+        <td>科目</td>
+        <td>图片</td>
+        <td>单价</td>
+        <td>数量</td>
+        <td>小计</td>
+        <td>操作</td>
+    </tr>
+    </thead>
+
+    <tbody v-if=" list.length>0">
+    <tr v-for="(item, index) in list" :key="item.id">
+        <td class="center">{{item.name}}</td>
+        <td><img :src="item.icon" class="img"></td>
+        <td class="center">{{item.price}}</td>
+        <td>
+            <button @click="decrease(item)">-</button>
+            {{item.number}}
+            <button @click="increase(item)">+</button>
+        </td>
+        <td>{{item.price*item.number}}</td>
+        <td @click="del(item.id)"><button style="background-color: red;color: white">删除</button></td>
+    </tr>
+    </tbody>
+
+    <tbody v-else>
+    <tr>
+        <td colspan="6" class="center">暂无数据喵</td>
+    </tr>
+    </tbody>
+
+    <tfoot v-if=" list.length>0">
+    <tr>
+        <td colspan="5" class="center">共计:￥ {{total}}</td>
+        <td><button style="color: white;background-color: red" @click="sumup">结算</button></td>
+    </tr>
+    </tfoot>
+</table>
+
+
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            list:[
+                {
+                    id:1,
+                    name:'语文',
+                    icon:"https://pic3.zhimg.com/v2-ac20f72ed46da24f86ae1ca148d571d6_r.jpg",
+                    price:12,
+                    number:0,
+                },
+                {
+                    id:2,
+                    name:'数学',
+                    icon:"https://ts1.cn.mm.bing.net/th/id/R-C.eb2177f0c4c9b1ea5a33f1c837b62873?rik=hMg7t%2fbQrDC72g&riu=http%3a%2f%2f5b0988e595225.cdn.sohucs.com%2fimages%2f20190904%2fcd639decbece459e8ff4a545e8e0e665.jpeg&ehk=w2jipI689Pn2ljLx42%2f8aroTyzAAKy5UVCVnjofSx1o%3d&risl=&pid=ImgRaw&r=0",
+                    price:10,
+                    number:0,
+                },
+                {
+                    id:3,
+                    name:"英语",
+                    icon:"https://seo-1302935713.file.myqcloud.com/2022/11/1.webp-10.jpg",
+                    price:10,
+                    number:0,
+                },
+                {
+                    id:4,
+                    name:'物理',
+                    icon:"https://www.szxuexiao.com/uploadimages/keben2022/rjgzwulibx12019/1.jpg",
+                    price:12,
+                    number:0,
+                },
+                {
+                    id:5,
+                    name:"化学",
+                    icon:"https://tse2-mm.cn.bing.net/th/id/OIP-C.7rmzyoGRoApN4mnBl-uGaQHaKk?rs=1&pid=ImgDetMain",
+                    price:12,
+                    number:0,
+                },
+                {
+                    id:6,
+                    name:'生物',
+                    icon:"https://www.szxuexiao.com/uploadimages/keben2022/rjgzshengwubx1_2019/9.jpg",
+                    price:10,
+                    number:0,
+                },
+                {
+                    id:7,
+                    name:'地理',
+                    icon:"https://www.szxuexiao.com/uploadimages/keben2022/rjbgzdlbx12019/rjbgzdlbx12019_00.jpg",
+                    price:10,
+                    number:0,
+                },
+                {
+                    id:8,
+                    name:'历史',
+                    icon:"https://www.szxuexiao.com/uploadimages/keben2022/gzlishibxs2019/gzlishibxs2019_00.jpg",
+                    price:7,
+                    number:0,
+                },
+                {
+                    id:9,
+                    name:'政治',
+                    icon:"https://img-preview.51jiaoxi.com/3/9/5852176/0/1.jpg?x-oss-process=image/crop,h_1044,g_center",
+                    price:5,
+                    number:0,
+                }
+            ],
+            name:"",
+            price:"",
+            number:0,
+        },
+        methods: {
+            del(id){
+                this.list=this.list.filter(item=>item.id!==id)
+            },
+            increase(item){
+                item.number++
+            },
+            decrease(item){
+                item.number--;
+                if(item.number<0){
+                    alert('数量不能小于0！')
+                    item.number=0;
+                }
+            },
+            sumup(){
+                alert(`请支付${this.total}元`);
+            }
+        },
+        computed:{
+            total(){
+                return this.list.reduce((sum,item)=>sum+item.number*item.price,0)
+            }
+        }
+    })
+</script>
+</html>
