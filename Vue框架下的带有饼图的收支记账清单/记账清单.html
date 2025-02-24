@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>记账清单</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="main-container">
+  <table style="margin-left: auto; margin-right: auto; width: 80%;">
+    <caption>记账清单</caption>
+    <thead>
+    <tr>
+      <td>时间</td>
+      <td>类型</td>
+      <td>金额</td>
+      <td>操作</td>
+    </tr>
+    </thead>
+    <tbody v-if="list.length > 0">
+    <tr v-for="(item, index) in list" :key="item.id">
+      <td>{{item.time}}</td>
+      <td>{{item.name}}</td>
+      <td>{{ item.type === '+'? '+' + item.money : '-' + item.money }}</td>
+      <td><button class="button" @click="del(item.id)">删除</button></td>
+    </tr>
+    </tbody>
+    <tbody v-else>
+    <tr>
+      <td colspan="4" style="text-align: center">暂无数据喵~</td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="form-container">
+    <div class="form-item">
+      <div class="label">时间：</div>
+      <div class="input">
+        <input type="date" v-model.trim="time">
+      </div>
+    </div>
+    <div class="form-item">
+      <div class="label">收支项目：</div>
+      <div class="input">
+        <input type="text" v-model.trim="name" placeholder="请输入收支项目:">
+      </div>
+    </div>
+    <div class="form-item">
+      <div class="label">金额：</div>
+      <div class="input">
+        <input type="number" v-model.trim="money" placeholder="请输入金额:">
+      </div>
+    </div>
+    <div class="form-item">
+      <div class="label">
+        <input type="radio" value="+" v-model="type">收入
+        <input type="radio" value="-" v-model="type">支出
+      </div>
+    </div>
+    <div class="form-item">
+      <button @click="add" class="button">添加</button>
+    </div>
+  </div>
+  <div class="charts-container">
+    <div id="income-chart" class="chart"></div>
+    <div id="expense-chart" class="chart"></div>
+  </div>
+</div>
+<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '.main-container',
+    data: {
+      list: [],
+      time: '',
+      type: '+',
+      name: '',
+      money: '',
+    },
+    methods: {
+      del(id) {
+        this.list = this.list.filter(item => item.id!== id);
+      },
+      add() {
+        if (!this.name) {
+          alert("请输入收支项目！");
+          return;
+        }
+        if (this.money === '') {
+          alert("请输入金额！");
+          return;
+        }
+        this.money = Number(this.money) || 0;
+        const amount = this.type === '+'? Number(this.money) : -Number(this.money);
+        this.list.unshift({
+          id: +new Date(),
+          time: this.time,
+          name: this.name,
+          money: Math.abs(amount),
+          type: this.type,
+        });
+
+        this.time = '';
+        this.name = '';
+        this.money = '';
+      },
+      renderCharts() {
+        const incomeList = this.list.filter(item => item.type === '+');
+        const expenseList = this.list.filter(item => item.type === '-');
+
+        const incomeChart = echarts.init(document.getElementById('income-chart'));
+        incomeChart.setOption({
+          title: {
+            text: "收入清单",
+            left: 'center',
+          },
+          tooltip: {
+            trigger: 'item',
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+          },
+          series: [
+            {
+              name: '收入清单',
+              type: 'pie',
+              radius: '60%',
+              data: incomeList.map(item => ({ value: item.money, name: item.name })),
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        });
+
+        const expenseChart = echarts.init(document.getElementById('expense-chart'));
+        expenseChart.setOption({
+          title: {
+            text: "支出清单",
+            left: 'center',
+          },
+          tooltip: {
+            trigger: 'item',
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+          },
+          series: [
+            {
+              name: '支出清单',
+              type: 'pie',
+              radius: '60%',
+              data: expenseList.map(item => ({ value: item.money, name: item.name })),
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        });
+      }
+    },
+    computed: {
+      sum() {
+        return this.list.reduce((sum, item) => {
+          return sum + (item.type === '+'? item.money : -item.money);
+        }, 0);
+      }
+    },
+    mounted() {
+      this.renderCharts();
+    },
+    watch: {
+      list: {
+        deep: true,
+        handler() {
+          this.renderCharts();
+        }
+      }
+    }
+  });
+</script>
+</body>
+
+</html>
